@@ -147,7 +147,7 @@ else:
 
         # Thanh 3: Độ sáng (β)
         st.markdown('<div class="control-item">', unsafe_allow_html=True)
-        st.image("https://cdn-icons-png.flaticon.com/512/2910/2910762.png", width=30) # Mặt trời
+        st.image("https://vn.freepik.com/bieu-tuong/sun_18764257#fromView=search&page=1&position=7&uuid=960c94c5-84ef-445e-b45d-3fd24bece604", width=30) # Mặt trời
         beta = st.slider("", -100, 100, 0, step=1, label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
 
