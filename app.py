@@ -151,13 +151,7 @@ else:
         beta = st.slider("", -100, 100, 0, step=1, label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Thanh 4: Nhiễu
-        st.markdown('<div class="control-item">', unsafe_allow_html=True)
-        st.image("https://cdn-icons-png.flaticon.com/512/117/117150.png", width=30) # Dấu chấm
-        noise_level = st.slider("", 0.0, 0.2, 0.0, step=0.01, label_visibility="collapsed")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        st.markdown('</div>', unsafe_allow_html=True)
+       
 
     # 2. Hiển thị ảnh (Cột 2)
     with col_img:
@@ -175,16 +169,7 @@ else:
             processed[:,:,1] = cv2.multiply(processed[:,:,1], 0.7) # Giảm xanh lá
             processed[:,:,2] = cv2.addWeighted(processed[:,:,2], 1.4, 0, 0, 25) # Tăng xanh dương
             
-        # C. Thêm nhiễu muối tiêu
-        if noise_level > 0.0:
-            output = np.copy(processed)
-            num_salt = np.ceil(noise_level * processed.size * 0.5)
-            coords = [np.random.randint(0, i - 1, int(num_salt)) for i in processed.shape]
-            output[tuple(coords)] = 255
-            num_pepper = np.ceil(noise_level * processed.size * 0.5)
-            coords = [np.random.randint(0, i - 1, int(num_pepper)) for i in processed.shape]
-            output[tuple(coords)] = 0
-            processed = output
+      
 
         # Hiển thị ảnh "Trước"
         st.markdown('<div class="image-wrapper"><div class="image-label">Trước</div>', unsafe_allow_html=True)
