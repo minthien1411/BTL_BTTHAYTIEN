@@ -60,15 +60,5 @@ if uploaded_file is not None:
         st.subheader("Ảnh đã xử lý")
         st.image(processed_img, use_container_width=True)
 
-    # Hiện công thức toán học (Thầy Tiến cực thích cái này)
-    st.write("---")
-    st.markdown("### Cơ sở toán học:")
-    st.latex(r"P_{out}(x,y) = \alpha \cdot P_{in}(x,y) + \beta")
-
-    # Phân tích đặc trưng Histogram (Chương 2)
-    if st.checkbox("Hiển thị Biểu đồ Histogram"):
-        st.write("#### Phân tích mật độ mức xám")
-        gray_img = cv2.cvtColor(processed_img, cv2.COLOR_RGB2GRAY)
-        fig, ax = plt.subplots()
-        ax.hist(gray_img.ravel(), bins=256, range=[0, 256], color='blue', alpha=0.7)
-        st.pyplot(fig)
+   
+    
