@@ -3,21 +3,21 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 
-st.title("Web Xử Lý Ảnh Siêu Tốc 🚀")
+st.title("Web Xử Lý Ảnh Siêu Tốc")
 
-uploaded_file = st.file_uploader("Tải ảnh vào đây m", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Tải ảnh", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     img_array = np.array(image)
 
     # --- HIỂN THỊ ẢNH GỐC ---
-    st.write("### 📸 Ảnh gốc:")
+    st.write("Ảnh gốc:")
     st.image(img_array, use_container_width=True)
     st.write("---") 
 
     # --- PHẦN ĐIỀU CHỈNH 1: CƠ BẢN (TRÊN MÀN HÌNH CHÍNH) ---
-    st.write("### 🛠 1. Chỉnh sửa cơ bản")
+    st.write("1. Chỉnh sửa cơ bản")
     col_a, col_b = st.columns(2)
     with col_a:
         alpha = st.slider("Độ tương phản (α)", 1.0, 3.0, 1.0, step=0.1)
@@ -25,9 +25,9 @@ if uploaded_file is not None:
         beta = st.slider("Độ sáng (β)", -100, 100, 0)
 
     # --- PHẦN ĐIỀU CHỈNH 2: BỘ LỌC (THANH TRƯỢT LƯỚT) ---
-    st.write("### 🎨 2. Lướt để chọn bộ lọc nghệ thuật")
+    st.write("#2.Lướt chọn filter")
     filter_choice = st.select_slider(
-        "Kéo thanh này để đổi phong cách:",
+        
         options=["Gốc", "Vintage", "Cyberpunk", "Mùa Hạ", "Mùa Đông", "Mùa Thu", "Nắng Ấm"]
     )
 
