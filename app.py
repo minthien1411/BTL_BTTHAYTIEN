@@ -43,11 +43,7 @@ if file_upload:
     # BẮT ĐẦU CHẠY THUẬT TOÁN XỬ LÝ
     # ==========================================
     
-    # Fix lỗi vặt: Lỡ người dùng kéo thanh trượt trái vượt qua phải thì chặn lại
-    if trai >= phai: 
-        phai = trai + 1
-    if tren >= duoi: 
-        duoi = tren + 1
+  
     
     # Bước 1: Cắt ảnh (Dùng Array Slicing)
     img_cut = img[tren:duoi, trai:phai]
