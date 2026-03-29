@@ -28,10 +28,10 @@ if uploaded_file is not None:
     st.write("---")
     c1, c2 = st.columns(2)
     with c1:
-        st.write("🖼 **Ảnh gốc**")
+        st.write("Ảnh gốc")
         st.image(img_array, use_container_width=True)
     with c2:
-        st.write("✨ **Ảnh sau xử lý**")
+        st.write("Ảnh sau xử lý")
         st.image(img_processed, use_container_width=True)
 
     # --- 5. CHỨC NĂNG TẢI ẢNH VỀ ---
@@ -47,11 +47,11 @@ if uploaded_file is not None:
 
     # Bước C: Tạo nút tải về
     st.download_button(
-        label="📥 Tải ảnh đã xử lý về máy",
+        label="Tải ảnh",
         data=byte_im,
         file_name="ket_qua_xu_ly.png",
         mime="image/png"
     )
 
-    # Hiện công thức cho "hàn lâm"
-    st.latex(r"P_{out} = \alpha \cdot P_{in} + \beta")
+
+
