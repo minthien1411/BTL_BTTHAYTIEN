@@ -33,14 +33,9 @@ if file_upload:
     goc = st.slider("Góc xoay", -180, 180, 0)
 
     # 3. Cắt ảnh bằng 4 thanh trượt
-    st.write("**3. Cắt ảnh**")
-    col1, col2 = st.columns(2)
-    with col1:
-        trai = st.slider("Từ trái sang", 0, w-1, 0)
-        tren = st.slider("Từ trên xuống", 0, h-1, 0)
-    with col2:
-        phai = st.slider("Từ phải sang", 1, w, w)
-        duoi = st.slider("Từ dưới lên", 1, h, h)
+    st.write("3. Cắt ảnh (Kéo 2 đầu thanh trượt để chọn vùng)")
+  trai, phai = st.slider("Cắt theo chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
+    tren, duoi = st.slider("Cắt theo chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
 
     st.write("---")
 
