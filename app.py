@@ -27,7 +27,7 @@ if uploaded_file is not None:
     st.write("2. phóng to và Cắt ảnh")
     col_zoom, col_rot = st.columns(2)
     with col_zoom:
-        zoom_factor = st.slider("Tỷ lệ phóng (x lần)", 1.0, 5.0, value=1.0, step=0.1)
+        zoom_factor = st.slider("Tỷ lệ phóng (x lần)", 1.0, 2.5, value=1.0, step=0.1)
     with col_rot:
         # Thanh trượt xoay từ -180 độ đến 180 độ
         goc_xoay = st.slider("Góc xoay (Độ)", -180, 180, value=0, step=1)
