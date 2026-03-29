@@ -1,66 +1,67 @@
-import streamlit as st
 import cv2
 import numpy as np
+import streamlit as st
 from PIL import Image
-import io
+import io # Thư viện để hỗ trợ tải ảnh về
 
-# --- 1. TIÊU ĐỀ ---
-st.title("HỆ THỐNG XỬ LÝ ẢNH NHÓM 10 - PTIT")
+st.title("Web Xử Lý Ảnh Siêu Tốc 🚀")
 
-uploaded_file = st.file_uploader("Chọn ảnh để bắt đầu", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Tải ảnh vào đây m", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     img_array = np.array(image)
     
-    # Lấy kích thước ảnh gốc để giới hạn thanh trượt cắt ảnh
-    chieu_cao, chieu_rong = img_array.shape[:2]
+    # Lấy kích thước ảnh để đặt giới hạn cho thanh trượt cắt ảnh
+    h, w = img_array.shape[:2]
 
-    # --- 2. THANH ĐIỀU CHỈNH (SIDEBAR) ---
-    st.sidebar.header("CÔNG CỤ XỬ LÝ")
-    
-    # Chức năng cắt ảnh (MỚI THÊM)
-    st.sidebar.subheader("1. Cắt ảnh (Crop)")
-    left = st.sidebar.slider("Cắt từ bên trái", 0, chieu_rong - 1, 0)
-    right = st.sidebar.slider("Cắt từ bên phải", 0, chieu_rong, chieu_rong)
-    top = st.sidebar.slider("Cắt từ phía trên", 0, chieu_cao - 1, 0)
-    bottom = st.sidebar.slider("Cắt từ phía dưới", 0, chieu_cao, chieu_cao)
+    st.write("### 🛠 CÔNG CỤ ĐIỀU CHỈNH")
 
-    # Chức năng chỉnh sáng & tương phản (Giữ nguyên)
-    st.sidebar.subheader("2. Chỉnh điểm ảnh")
-    alpha = st.sidebar.slider("Hệ số Tương phản (α)", 1.0, 3.0, 1.0, 0.1)
-    beta = st.sidebar.slider("Độ sáng cộng thêm (β)", -100, 100, 0)
+    # --- PHẦN 1: CHỈNH SÁNG & TƯƠNG PHẢN ---
+    col_a, col_b = st.columns(2)
+    with col_a:
+        alpha = st.slider("Chỉnh độ tương phản (α)", 1.0, 3.0, 1.0, step=0.1)
+    with col_b:
+        beta = st.slider("Chỉnh độ sáng (β)", -100, 100, 0)
 
-    # --- 3. THUẬT TOÁN XỬ LÝ ---
-    
-    # Bước A: Cắt ảnh bằng kỹ thuật Slicing ma trận Numpy
-    # Cú pháp: mang_anh[y_dau : y_cuoi, x_dau : x_cuoi]
-    img_cropped = img_array[top:bottom, left:right]
-
-    # Bước B: Chỉnh sáng/tương phản trên phần ảnh đã cắt
-    img_processed = cv2.convertScaleAbs(img_cropped, alpha=alpha, beta=beta)
-
-    # --- 4. HIỂN THỊ SO SÁNH ---
     st.write("---")
+
+    # --- PHẦN 2: CẮT ẢNH TÙY Ý (4 THANH TRƯỢT) ---
+    st.write("📏 **Cắt ảnh (Kéo để chọn vùng muốn lấy):**")
     c1, c2 = st.columns(2)
     with c1:
-        st.write("🖼 **Ảnh gốc ban đầu**")
-        st.image(img_array, use_container_width=True)
+        trai = st.slider("Cắt từ bên TRÁI sang", 0, w-1, 0)
+        tren = st.slider("Cắt từ phía TRÊN xuống", 0, h-1, 0)
     with c2:
-        st.write("✨ **Kết quả (Đã cắt + Chỉnh sửa)**")
-        st.image(img_processed, use_container_width=True)
+        phai = st.slider("Cắt từ bên PHẢI vào", 1, w, w)
+        duoi = st.slider("Cắt từ phía DƯỚI lên", 1, h, h)
 
-    # --- 5. TẢI ẢNH VỀ ---
+    # --- PHẦN 3: THUẬT TOÁN (Slicing ma trận) ---
+    # Cắt ảnh trước: lấy vùng từ [trên đến dưới, trái đến phải]
+    # Lưu ý: Nếu lỡ kéo nhầm trái > phải thì code vẫn không lỗi nhờ if này
+    if trai >= phai: phai = trai + 1
+    if tren >= duoi: duoi = tren + 1
+    
+    img_cropped = img_array[tren:duoi, trai:phai]
+
+    # Sau đó mới chỉnh sáng/tương phản trên phần ảnh đã cắt
+    img_final = cv2.convertScaleAbs(img_cropped, alpha=alpha, beta=beta)
+
+    # --- PHẦN 4: HIỂN THỊ VÀ TẢI VỀ ---
     st.write("---")
-    result_pil = Image.fromarray(img_processed)
+    st_col1, st_col2 = st.columns(2)
+    with st_col1:
+        st.write("🖼 **Ảnh gốc:**")
+        st.image(img_array, use_container_width=True)
+    with st_col2:
+        st.write("✨ **Kết quả:**")
+        st.image(img_final, use_container_width=True)
+
+    # Chức năng tải về
+    result_pil = Image.fromarray(img_final)
     buffer = io.BytesIO()
     result_pil.save(buffer, format="PNG")
-    st.download_button(
-        label="📥 Tải ảnh kết quả về máy",
-        data=buffer.getvalue(),
-        file_name="uppic_result.png",
-        mime="image/png"
-    )
+    st.download_button(label="📥 Tải ảnh này về máy", data=buffer.getvalue(), file_name="ket_qua.png", mime="image/png")
 
-    # Hiện công thức toán học
+    # Hiện công thức cho thầy Tiến cộng điểm
     st.latex(r"P_{out} = \alpha \cdot P_{in}[y_1:y_2, x_1:x_2] + \beta")
