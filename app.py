@@ -34,7 +34,7 @@ if file_upload:
 
     # 3. Cắt ảnh bằng 4 thanh trượt
     st.write("3. Cắt ảnh (Kéo 2 đầu thanh trượt để chọn vùng)")
-  trai, phai = st.slider("Cắt theo chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
+    trai, phai = st.slider("Cắt theo chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
     tren, duoi = st.slider("Cắt theo chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
 
     st.write("---")
