@@ -4,91 +4,93 @@ import streamlit as st
 from PIL import Image
 import io
 
-st.title("Web Xử Lý Ảnh")
+# Setup tiêu đề web
+st.title("Web Xử Lý Ảnh Nhóm 10")
 
-uploaded_file = st.file_uploader("Tải ảnh vào đây m", type=["jpg", "jpeg", "png"])
+file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    img_array = np.array(image)
-    h, w = img_array.shape[:2]
+# Kịch bản khi người dùng đã tải ảnh lên
+if file_upload:
+    # Mở ảnh bằng thư viện PIL rồi chuyển sang mảng numpy để cv2 đọc được
+    img_goc = Image.open(file_upload)
+    img = np.array(img_goc)
+    
+    # Lấy chiều cao, rộng của ảnh để lát làm giới hạn cho thanh trượt
+    h, w = img.shape[:2] 
 
-    st.write("CÔNG CỤ ĐIỀU CHỈNH")
+    st.write("### Công cụ chỉnh sửa")
 
-    # --- PHẦN 1: CHỈNH ĐIỂM ẢNH (SÁNG/TƯƠNG PHẢN) ---
-    st.write("1. Chỉnh điểm ảnh cơ bản")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        alpha = st.slider("Chỉnh độ tương phản (α)", 1.0, 3.0, value=1.0, step=0.1)
-    with col_b:
-        beta = st.slider("Chỉnh độ sáng (β)", -100, 100, value=0)
-
-    # --- PHẦN 2: BIẾN ĐỔI HÌNH HỌC (PHÓNG TO & XOAY) - ĐÃ CẬP NHẬT ---
-    st.write("2. Xoay ảnh")
-   col_rot = st.columns(1)
-    with col_rot:
-        # Thanh trượt xoay từ -180 độ đến 180 độ
-        goc_xoay = st.slider("Góc xoay (Độ)", -180, 180, value=0, step=1)
-
-    st.write("---")
-
-    # --- PHẦN 3: CẮT ẢNH (Giữ nguyên) ---
-    st.write("3. Cắt ảnh (Kéo để chọn vùng)")
+    # 1. Phần thanh trượt chỉnh sáng/tương phản
+    st.write("**1. Chỉnh màu cơ bản**")
     c1, c2 = st.columns(2)
     with c1:
-        trai = st.slider("Cắt từ bên TRÁI sang", 0, w-1, value=0)
-        tren = st.slider("Cắt từ phía TRÊN xuống", 0, h-1, value=0)
+        do_tuong_phan = st.slider("Tương phản (alpha)", 1.0, 3.0, 1.0, step=0.1)
     with c2:
-        phai = st.slider("Cắt từ bên PHẢI vào", 1, w, value=w)
-        duoi = st.slider("Cắt từ phía DƯỚI lên", 1, h, value=h)
+        do_sang = st.slider("Độ sáng (beta)", -100, 100, 0)
 
-    # --- THUẬT TOÁN XỬ LÝ ---
-    if trai >= phai: phai = trai + 1
-    if tren >= duoi: duoi = tren + 1
-    
-    # Bước 1: Cắt ảnh (Array Slicing)
-    img_cropped = img_array[tren:duoi, trai:phai]
+    # 2. Xoay ảnh
+    st.write("**2. Xoay ảnh**")
+    goc = st.slider("Góc xoay", -180, 180, 0)
 
-    # Bước 2: Chỉnh điểm ảnh (Sáng/Tương phản)
-    img_adjusted = cv2.convertScaleAbs(img_cropped, alpha=alpha, beta=beta)
+    # 3. Cắt ảnh bằng 4 thanh trượt
+    st.write("**3. Cắt ảnh**")
+    col1, col2 = st.columns(2)
+    with col1:
+        trai = st.slider("Từ trái sang", 0, w-1, 0)
+        tren = st.slider("Từ trên xuống", 0, h-1, 0)
+    with col2:
+        phai = st.slider("Từ phải sang", 1, w, w)
+        duoi = st.slider("Từ dưới lên", 1, h, h)
 
-    # Bước 3: Xoay ảnh (MỚI THÊM)
-    if goc_xoay != 0:
-        h_rot, w_rot = img_adjusted.shape[:2]
-        tam_xoay = (w_rot // 2, h_rot // 2) # Lấy tọa độ tâm bức ảnh
-        
-        # Lập ma trận xoay (Rotation Matrix)
-        ma_tran_xoay = cv2.getRotationMatrix2D(tam_xoay, goc_xoay, 1.0)
-        
-        # Thực hiện phép biến đổi Affine để xoay ảnh
-        img_adjusted = cv2.warpAffine(img_adjusted, ma_tran_xoay, (w_rot, h_rot))
-
-    # Bước 4: Phóng to (Resize)
-    curr_h, curr_w = img_adjusted.shape[:2]
-    new_w = int(curr_w * zoom_factor)
-    new_h = int(curr_h * zoom_factor)
-    img_final = cv2.resize(img_adjusted, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-
-    # --- HIỂN THỊ VÀ TẢI VỀ ---
     st.write("---")
-    st_col1, st_col2 = st.columns(2)
-    with st_col1:
-        st.write("Ảnh gốc:")
-        st.image(img_array, use_container_width=True)
-    with st_col2:
-        st.write("Kết quả:")
+
+    # ==========================================
+    # BẮT ĐẦU CHẠY THUẬT TOÁN XỬ LÝ
+    # ==========================================
+    
+    # Fix lỗi vặt: Lỡ người dùng kéo thanh trượt trái vượt qua phải thì chặn lại
+    if trai >= phai: 
+        phai = trai + 1
+    if tren >= duoi: 
+        duoi = tren + 1
+    
+    # Bước 1: Cắt ảnh (Dùng Array Slicing)
+    img_cut = img[tren:duoi, trai:phai]
+
+    # Bước 2: Chỉnh độ sáng và tương phản
+    img_color = cv2.convertScaleAbs(img_cut, alpha=do_tuong_phan, beta=do_sang)
+
+    # Bước 3: Xoay ảnh (Nếu có kéo thanh trượt góc xoay)
+    if goc != 0:
+        h_moi, w_moi = img_color.shape[:2]
+        tam = (w_moi // 2, h_moi // 2) # Lấy tâm bức ảnh
+        
+        # Tạo ma trận xoay
+        matrix = cv2.getRotationMatrix2D(tam, goc, 1.0)
+        img_final = cv2.warpAffine(img_color, matrix, (w_moi, h_moi))
+    else:
+        # Nếu góc = 0 thì không cần xoay
+        img_final = img_color
+
+    # ==========================================
+    # HIỂN THỊ LÊN WEB VÀ TẢI VỀ
+    # ==========================================
+    
+    cot_trai, cot_phai = st.columns(2)
+    with cot_trai:
+        st.write("Ảnh ban đầu")
+        st.image(img, use_container_width=True)
+    with cot_phai:
+        st.write("Ảnh đã sửa")
         st.image(img_final, use_container_width=True)
 
-    # Nút Tải về
-    result_pil = Image.fromarray(img_final)
-    buffer = io.BytesIO()
-    result_pil.save(buffer, format="PNG")
+    # Đóng gói ảnh thành dạng Bytes để cho tải về
+    buf = io.BytesIO()
+    Image.fromarray(img_final).save(buf, format="PNG")
+    
     st.download_button(
-        label="Tải ảnh", 
-        data=buffer.getvalue(), 
-        file_name="uppic_result.png", 
+        label="Tải ảnh về", 
+        data=buf.getvalue(), 
+        file_name="anh_da_sua.png", 
         mime="image/png"
     )
-
-
-  
