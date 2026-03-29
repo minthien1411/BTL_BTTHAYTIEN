@@ -4,12 +4,12 @@ import streamlit as st
 from PIL import Image
 import io
 
-# Setup tiêu đề web
+#  tiêu đề web
 st.title("Web Xử Lý Ảnh Nhóm 10")
 
 file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
-# Kịch bản khi người dùng đã tải ảnh lên
+
 if file_upload:
     # Mở ảnh bằng thư viện PIL rồi chuyển sang mảng numpy để cv2 đọc được
     img_goc = Image.open(file_upload)
@@ -39,12 +39,10 @@ if file_upload:
 
     st.write("---")
 
-    # ==========================================
+    
     # BẮT ĐẦU CHẠY THUẬT TOÁN XỬ LÝ
-    # ==========================================
     
   
-    
     # Bước 1: Cắt ảnh (Dùng Array Slicing)
     img_cut = img[tren:duoi, trai:phai]
 
@@ -63,9 +61,7 @@ if file_upload:
         # Nếu góc = 0 thì không cần xoay
         img_final = img_color
 
-    # ==========================================
     # HIỂN THỊ LÊN WEB VÀ TẢI VỀ
-    # ==========================================
     
     cot_trai, cot_phai = st.columns(2)
     with cot_trai:
