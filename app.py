@@ -4,7 +4,7 @@ import streamlit as st
 from PIL import Image
 import io
 
-st.title("Web Xử Lý Ảnh Siêu Tốc 🚀")
+st.title("Web Xử Lý Ảnh")
 
 uploaded_file = st.file_uploader("Tải ảnh vào đây m", type=["jpg", "jpeg", "png"])
 
@@ -13,10 +13,10 @@ if uploaded_file is not None:
     img_array = np.array(image)
     h, w = img_array.shape[:2]
 
-    st.write("### 🛠 CÔNG CỤ ĐIỀU CHỈNH")
+    st.write("CÔNG CỤ ĐIỀU CHỈNH")
 
     # --- PHẦN 1: CHỈNH ĐIỂM ẢNH (SÁNG/TƯƠNG PHẢN) ---
-    st.write("#### 1. Chỉnh điểm ảnh cơ bản")
+    st.write("1. Chỉnh điểm ảnh cơ bản")
     col_a, col_b = st.columns(2)
     with col_a:
         alpha = st.slider("Chỉnh độ tương phản (α)", 1.0, 3.0, value=1.0, step=0.1)
@@ -24,7 +24,7 @@ if uploaded_file is not None:
         beta = st.slider("Chỉnh độ sáng (β)", -100, 100, value=0)
 
     # --- PHẦN 2: BIẾN ĐỔI HÌNH HỌC (PHÓNG TO & XOAY) - ĐÃ CẬP NHẬT ---
-    st.write("#### 📐 2. Biến đổi hình học")
+    st.write("2. phóng to và Cắt ảnh")
     col_zoom, col_rot = st.columns(2)
     with col_zoom:
         zoom_factor = st.slider("Tỷ lệ phóng (x lần)", 1.0, 5.0, value=1.0, step=0.1)
@@ -35,7 +35,7 @@ if uploaded_file is not None:
     st.write("---")
 
     # --- PHẦN 3: CẮT ẢNH (Giữ nguyên) ---
-    st.write("#### 📏 3. Cắt ảnh (Kéo để chọn vùng)")
+    st.write("3. Cắt ảnh (Kéo để chọn vùng)")
     c1, c2 = st.columns(2)
     with c1:
         trai = st.slider("Cắt từ bên TRÁI sang", 0, w-1, value=0)
@@ -75,10 +75,10 @@ if uploaded_file is not None:
     st.write("---")
     st_col1, st_col2 = st.columns(2)
     with st_col1:
-        st.write("🖼 **Ảnh gốc:**")
+        st.write("Ảnh gốc:")
         st.image(img_array, use_container_width=True)
     with st_col2:
-        st.write("✨ **Kết quả:**")
+        st.write("Kết quả:")
         st.image(img_final, use_container_width=True)
 
     # Nút Tải về
@@ -86,13 +86,11 @@ if uploaded_file is not None:
     buffer = io.BytesIO()
     result_pil.save(buffer, format="PNG")
     st.download_button(
-        label="📥 Tải ảnh này về máy", 
+        label="Tải ảnh", 
         data=buffer.getvalue(), 
         file_name="uppic_result.png", 
         mime="image/png"
     )
 
-    # Cập nhật công thức tổng quát cho thầy Tiến xem
-    st.write("---")
-    st.markdown("#### Cơ sở toán học của Pipeline:")
-    st.latex(r"P_{out} = \text{Affine}\left( \alpha \cdot P_{in}[y_1:y_2, x_1:x_2] + \beta \right)")
+
+  
