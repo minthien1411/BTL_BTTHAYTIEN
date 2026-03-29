@@ -49,7 +49,7 @@ if uploaded_file is not None:
     st.download_button(
         label="Tải ảnh",
         data=byte_im,
-        file_name="ket_qua_xu_ly.png",
+        file_name="anh_xu_ly.png",
         mime="image/png"
     )
 
