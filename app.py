@@ -46,7 +46,7 @@ if file_upload:
   
     
     # Bước 1: Cắt ảnh (Dùng Array Slicing)
-  img_cut = img[tren:duoi, trai:phai]
+    img_cut = img[tren:duoi, trai:phai]
 
     # Bước 2: Chỉnh độ sáng và tương phản
     img_color = cv2.convertScaleAbs(img_cut, alpha=do_tuong_phan, beta=do_sang)
