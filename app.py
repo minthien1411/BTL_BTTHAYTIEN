@@ -24,10 +24,8 @@ if uploaded_file is not None:
         beta = st.slider("Chỉnh độ sáng (β)", -100, 100, value=0)
 
     # --- PHẦN 2: BIẾN ĐỔI HÌNH HỌC (PHÓNG TO & XOAY) - ĐÃ CẬP NHẬT ---
-    st.write("2. phóng to và Cắt ảnh")
-    col_zoom, col_rot = st.columns(2)
-    with col_zoom:
-        zoom_factor = st.slider("Tỷ lệ phóng (x lần)", 1.0, 2.5, value=1.0, step=0.1)
+    st.write("2. Xoay ảnh")
+   col_rot = st.columns(1)
     with col_rot:
         # Thanh trượt xoay từ -180 độ đến 180 độ
         goc_xoay = st.slider("Góc xoay (Độ)", -180, 180, value=0, step=1)
