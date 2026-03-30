@@ -4,18 +4,18 @@ import streamlit as st
 from PIL import Image
 import io
 
-# Setup tiêu đề web
+#Tiêu đề web
 st.title("Web Xử Lý Ảnh Nhóm 10")
 
 file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
-# Kịch bản khi người dùng đã tải ảnh lên
+
 if file_upload:
     # Mở ảnh bằng thư viện PIL rồi chuyển sang mảng numpy để cv2 đọc được
     img_goc = Image.open(file_upload)
     img = np.array(img_goc)
     
-    # Lấy chiều cao, rộng của ảnh để lát làm giới hạn cho thanh trượt
+    # Lấy chiều cao, rộng của ảnh để làm giới hạn cho thanh trượt
     h, w = img.shape[:2] 
 
     st.write("### Công cụ chỉnh sửa")
@@ -32,36 +32,34 @@ if file_upload:
     st.write("**2. Xoay ảnh**")
     goc = st.slider("Góc xoay", -180, 180, 0)
 
-    # 3. Cắt ảnh bằng thanh trượt kép (Range Slider)
+    # 3. Cắt ảnh bằng thanh trượt kép 
     st.write("**3. Cắt ảnh (Kéo 2 đầu thanh trượt để chọn vùng)**")
     trai, phai = st.slider("Cắt theo chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
     tren, duoi = st.slider("Cắt theo chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
 
-    # 4. Làm mịn ảnh (MỚI THÊM VÀO ĐÂY NHA)
+    # 4. Làm mịn ảnh 
     st.write("**4. Làm mịn ảnh (Khử nhiễu)**")
-    # Lưu ý: step=2 để thanh trượt luôn nhảy vào số lẻ (1, 3, 5, 7...)
+
     do_min = st.slider("Mức độ làm mịn", 1, 101, 1, step=2)
 
     st.write("---")
 
-    # ==========================================
-    # BẮT ĐẦU CHẠY THUẬT TOÁN XỬ LÝ
-    # ==========================================
+    #THUẬT TOÁN XỬ LÝ
     
-    # Lỡ người dùng kéo thanh trượt trái vượt qua phải thì chặn lại
+   
     if trai >= phai: 
         phai = trai + 1
     if tren >= duoi: 
         duoi = tren + 1
     
-    # Bước 1: Cắt ảnh (Array Slicing)
+    # Bước 1: Cắt ảnh 
     img_cut = img[tren:duoi, trai:phai]
 
     # Bước 2: Chỉnh độ sáng và tương phản
     img_color = cv2.convertScaleAbs(img_cut, alpha=do_tuong_phan, beta=do_sang)
 
-    # Bước 3: Làm mịn ảnh (Thuật toán mới chèn vào đây)
-    # Nếu thanh trượt > 1 thì mới áp dụng làm mịn
+    # Bước 3: Làm mịn ảnh 
+    # Nếu thanh trượt > 1 thì áp dụng làm mịn
     if do_min > 1:
         img_color = cv2.GaussianBlur(img_color, (do_min, do_min), 0)
 
@@ -77,9 +75,7 @@ if file_upload:
         # Nếu góc = 0 thì không cần xoay
         img_final = img_color
 
-    # ==========================================
     # HIỂN THỊ LÊN WEB VÀ TẢI VỀ
-    # ==========================================
     
     cot_trai, cot_phai = st.columns(2)
     with cot_trai:
@@ -89,7 +85,7 @@ if file_upload:
         st.write("Ảnh đã sửa")
         st.image(img_final, use_container_width=True)
 
-    # Đóng gói ảnh thành dạng Bytes để cho tải về
+    # chuyển ảnh thành dạng Bytes để cho tải về
     buf = io.BytesIO()
     Image.fromarray(img_final).save(buf, format="PNG")
     
