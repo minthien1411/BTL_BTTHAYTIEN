@@ -40,7 +40,7 @@ if file_upload:
     # 4. Làm mịn ảnh (MỚI THÊM VÀO ĐÂY NHA)
     st.write("**4. Làm mịn ảnh (Khử nhiễu)**")
     # Lưu ý: step=2 để thanh trượt luôn nhảy vào số lẻ (1, 3, 5, 7...)
-    do_min = st.slider("Mức độ làm mịn", 1, 201, 1, step=2)
+    do_min = st.slider("Mức độ làm mịn", 1, 101, 1, step=2)
 
     st.write("---")
 
