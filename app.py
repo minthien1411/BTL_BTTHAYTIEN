@@ -5,7 +5,7 @@ from PIL import Image
 import io
 
 #Tiêu đề web
-st.title("Web Xử Lý Ảnh Nhóm 10")
+st.title("Web Xử Lý Ảnh Nhóm 16")
 
 file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
