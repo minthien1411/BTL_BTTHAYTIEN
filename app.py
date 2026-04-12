@@ -32,7 +32,7 @@ if file_upload:
     st.write("**2. Xoay ảnh**")
     goc = st.slider("Góc xoay", -180, 180, 0)
 
-    # 3. Cắt ảnh bằng thanh trượt kép 
+    # 3. Cắt ảnh  
     st.write("**3. Cắt ảnh (Kéo 2 đầu thanh trượt để chọn vùng)**")
     trai, phai = st.slider("Cắt theo chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
     tren, duoi = st.slider("Cắt theo chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
@@ -43,6 +43,9 @@ if file_upload:
     do_min = st.slider("Mức độ làm mịn", 1, 101, 1, step=2)
 
     st.write("---")
+    # 5. Chuyển đổi hệ màu
+    st.write("**5. Chuyển đổi không gian màu**")
+    he_mau = st.selectbox("Chọn hệ màu muốn hiển thị", ["Gốc (RGB)", "Ảnh Xám (Grayscale)", "Hệ màu HSV"])
 
     #THUẬT TOÁN XỬ LÝ
     
@@ -74,6 +77,11 @@ if file_upload:
     else:
         # Nếu góc = 0 thì không cần xoay
         img_final = img_color
+    # Bước 5: Chuyển hệ màu 
+    if he_mau == "Ảnh Xám (Grayscale)":
+        img_final = cv2.cvtColor(img_final, cv2.COLOR_RGB2GRAY)
+    elif he_mau == "Hệ màu HSV":
+        img_final = cv2.cvtColor(img_final, cv2.COLOR_RGB2HSV)
 
     # HIỂN THỊ LÊN WEB VÀ TẢI VỀ
     
