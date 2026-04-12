@@ -20,7 +20,7 @@ if file_upload:
 
     st.write("### Công cụ chỉnh sửa")
 
-    # 1. Phần thanh trượt chỉnh sáng/tương phản
+    # 1. chỉnh sáng/tương phản
     st.write("**1. Chỉnh màu cơ bản**")
     c1, c2 = st.columns(2)
     with c1:
