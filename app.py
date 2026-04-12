@@ -21,12 +21,12 @@ if file_upload:
     st.write("### Công cụ chỉnh sửa")
 
     # 1. chỉnh sáng/tương phản
-    st.write("**1. Chỉnh màu cơ bản**")
+    st.write("**1. Chỉnh độ tương phản & độ sáng**")
     c1, c2 = st.columns(2)
     with c1:
-        do_tuong_phan = st.slider("Tương phản (alpha)", 1.0, 3.0, 1.0, step=0.1)
+        do_tuong_phan = st.slider("Tương phản ", 1.0, 3.0, 1.0, step=0.1)
     with c2:
-        do_sang = st.slider("Độ sáng (beta)", -100, 100, 0)
+        do_sang = st.slider("Độ sáng ", -100, 100, 0)
 
     # 2. Xoay ảnh
     st.write("**2. Xoay ảnh**")
@@ -38,7 +38,7 @@ if file_upload:
     tren, duoi = st.slider("Cắt theo chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
 
     # 4. Làm mịn ảnh 
-    st.write("**4. Làm mịn ảnh (Khử nhiễu)**")
+    st.write("**4. Làm mịn ảnh**")
 
     do_min = st.slider("Mức độ làm mịn", 1, 101, 1, step=2)
 
