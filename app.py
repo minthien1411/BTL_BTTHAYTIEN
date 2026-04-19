@@ -49,7 +49,10 @@ if file_upload:
 
     #THUẬT TOÁN XỬ LÝ
     
-   
+    if trai >= phai: 
+        phai = trai + 1
+    if tren >= duoi: 
+        duoi = tren + 1
     
     # Bước 1: Cắt ảnh 
     img_cut = img[tren:duoi, trai:phai]
