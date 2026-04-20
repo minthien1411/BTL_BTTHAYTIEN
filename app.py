@@ -13,7 +13,7 @@ st.title("Web Xử Lý Ảnh Nhóm 16")
 # ---------------------------------------------------------
 # PHẦN 1: THANH CÔNG CỤ BÊN TRÁI (SIDEBAR)
 # ---------------------------------------------------------
-st.sidebar.title("⚙️ Công cụ chỉnh sửa")
+st.sidebar.title("Công cụ chỉnh sửa")
 
 # 1. Chỉnh sáng/tương phản
 st.sidebar.markdown("**1. Chỉnh độ tương phản & độ sáng**")
@@ -110,7 +110,7 @@ if file_upload:
     
     st.write("---")
     st.download_button(
-        label="📥 Tải ảnh về máy", 
+        label="Tải ảnh về máy", 
         data=buf.getvalue(), 
         file_name="anh_da_sua.png", 
         mime="image/png"
