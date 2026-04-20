@@ -4,15 +4,15 @@ import streamlit as st
 from PIL import Image
 import io
 
-# Cấu hình trang web rộng ra một chút để xem ảnh cho đã
+
 st.set_page_config(layout="wide")
 
-# Tiêu đề web (Nằm ở giữa trang chính)
+
 st.title("Web Xử Lý Ảnh Nhóm 16")
 
-# ---------------------------------------------------------
-# PHẦN 1: THANH CÔNG CỤ BÊN TRÁI (SIDEBAR)
-# ---------------------------------------------------------
+ 
+# PHẦN 1: THANH CÔNG CỤ BÊN TRÁI 
+
 st.sidebar.title("Công cụ chỉnh sửa")
 
 # 1. Chỉnh sáng/tương phản
@@ -25,7 +25,7 @@ st.sidebar.markdown("**2. Xoay ảnh**")
 goc = st.sidebar.slider("Góc xoay", -180, 180, 0)
 
 # Chỗ này khởi tạo biến mặc định để tránh lỗi khi chưa có ảnh
-trai, phai, tren, duoi, w, h = 0, 0, 0, 0, 100, 100 
+
 
 # ---------------------------------------------------------
 # PHẦN 2: KHU VỰC CHÍNH (NẠP ẢNH & XỬ LÝ)
