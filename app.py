@@ -15,21 +15,11 @@ st.title("Web Xử Lý Ảnh Nhóm 16")
 
 st.sidebar.title("Công cụ chỉnh sửa")
 
-# 1. Chỉnh sáng/tương phản
-st.sidebar.markdown("**1. Chỉnh độ tương phản & độ sáng**")
-do_tuong_phan = st.sidebar.slider("Tương phản", 1.0, 3.0, 1.0, step=0.1)
-do_sang = st.sidebar.slider("Độ sáng", -100, 100, 0)
-
-# 2. Xoay ảnh
-st.sidebar.markdown("**2. Xoay ảnh**")
-goc = st.sidebar.slider("Góc xoay", -180, 180, 0)
-
-# Chỗ này khởi tạo biến mặc định để tránh lỗi khi chưa có ảnh
 
 
-# ---------------------------------------------------------
-# PHẦN 2: KHU VỰC CHÍNH (NẠP ẢNH & XỬ LÝ)
-# ---------------------------------------------------------
+
+# PHẦN 1: KHU VỰC CHÍNH (NẠP ẢNH & XỬ LÝ)
+
 file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
 if file_upload:
@@ -39,8 +29,16 @@ if file_upload:
     
     # Lấy chiều cao, rộng của ảnh để làm giới hạn cho thanh trượt
     h, w = img.shape[:2] 
+    # 1. Chỉnh sáng/tương phản
+    st.sidebar.markdown("**1. Chỉnh độ tương phản & độ sáng**")
+    do_tuong_phan = st.sidebar.slider("Tương phản", 1.0, 3.0, 1.0, step=0.1)
+    do_sang = st.sidebar.slider("Độ sáng", -100, 100, 0)
 
-    # Cập nhật lại thanh trượt cắt ảnh trên Sidebar khi đã có kích thước ảnh thật
+    # 2. Xoay ảnh
+    st.sidebar.markdown("**2. Xoay ảnh**")
+    goc = st.sidebar.slider("Góc xoay", -180, 180, 0)
+
+    # 3. Cắt ảnh
     st.sidebar.markdown("**3. Cắt ảnh**")
     trai, phai = st.sidebar.slider("Chiều NGANG (Trái ↔ Phải)", 0, w, (0, w))
     tren, duoi = st.sidebar.slider("Chiều DỌC (Trên ↕ Dưới)", 0, h, (0, h))
@@ -55,9 +53,7 @@ if file_upload:
     st.sidebar.markdown("**5. Chuyển đổi không gian màu**")
     he_mau = st.sidebar.selectbox("Chọn hệ màu muốn hiển thị", ["Gốc (RGB)", "Ảnh Xám (Grayscale)", "Hệ màu HSV"])
 
-    # ---------------------------------------------------------
-    # THUẬT TOÁN XỬ LÝ (Chạy ngầm)
-    # ---------------------------------------------------------
+    # THUẬT TOÁN XỬ LÝ 
     
     if trai >= phai: 
         phai = trai + 1
@@ -92,9 +88,7 @@ if file_upload:
     elif he_mau == "Hệ màu HSV":
         img_final = cv2.cvtColor(img_final, cv2.COLOR_RGB2HSV)
 
-    # ---------------------------------------------------------
     # HIỂN THỊ LÊN WEB VÀ TẢI VỀ
-    # ---------------------------------------------------------
     
     cot_trai, cot_phai = st.columns(2)
     with cot_trai:
