@@ -11,14 +11,14 @@ st.set_page_config(layout="wide")
 st.title("Web Xử Lý Ảnh Nhóm 16")
 
  
-# PHẦN 1: THANH CÔNG CỤ BÊN TRÁI 
+# PHẦN 1: GIAO DIỆN
 
 st.sidebar.title("Công cụ chỉnh sửa")
 
 
 
 
-# PHẦN 1: KHU VỰC CHÍNH (NẠP ẢNH & XỬ LÝ)
+
 
 file_upload = st.file_uploader("Chọn file ảnh (jpg, png)", type=["jpg", "jpeg", "png"])
 
@@ -53,7 +53,7 @@ if file_upload:
     st.sidebar.markdown("**5. Chuyển đổi không gian màu**")
     he_mau = st.sidebar.selectbox("Chọn hệ màu muốn hiển thị", ["Gốc (RGB)", "Ảnh Xám (Grayscale)", "Hệ màu HSV"])
 
-    # THUẬT TOÁN XỬ LÝ 
+    #PHẦN 2: THUẬT TOÁN XỬ LÝ 
     
     if trai >= phai: 
         phai = trai + 1
